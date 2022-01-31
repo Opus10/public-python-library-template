@@ -61,7 +61,7 @@ dependencies:
 
 # Sets up development environment
 .PHONY: setup
-setup: dependencies
+setup: lock dependencies
 	$(MAKE_CMD_WRAPPER) poetry run git-tidy --template -o .gitcommit.tpl
 	$(MAKE_CMD_WRAPPER) poetry run git config --local commit.template .gitcommit.tpl
 
