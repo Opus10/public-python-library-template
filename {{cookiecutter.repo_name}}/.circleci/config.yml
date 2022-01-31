@@ -5,6 +5,9 @@ executors:
     working_directory: ~/{{cookiecutter.repo_name}}
     docker:
       - image: opus10/circleci-public-python-library
+        environment:
+          # Ensure makefile commands are not wrapped in "docker run"
+          MAKE_CMD_WRAPPER: ''
 
 {% raw -%}
 jobs:
@@ -14,14 +17,14 @@ jobs:
       - checkout
       - restore_cache:
           key: v1-{{ checksum "poetry.lock" }}
-      - run: make ci_setup
-      - run: make test
+      - run: make dependencies
+      - run: make full-test-suite
       - save_cache:
           key: v1-{{ checksum "poetry.lock" }}
           paths:
             - /home/circleci/.local
             - /home/circleci/.cache/pypoetry/virtualenvs
-            - /home/circleci/.cache/pipx
+            - /home/circleci/{% endraw -%}{{cookiecutter.repo_name}}{% raw -%}/.venv
             - /home/circleci/{% endraw -%}{{cookiecutter.repo_name}}{% raw -%}/.tox
 
   lint:
@@ -30,17 +33,18 @@ jobs:
       - checkout
       - restore_cache:
           key: v1-{{ checksum "poetry.lock" }}
-      - run: make ci_setup
+      - run: make dependencies
       - run: make lint
 
-  check_changelog:
+  check_commits:
     executor: python
     steps:
       - checkout
       - restore_cache:
           key: v1-{{ checksum "poetry.lock" }}
-      - run: make ci_setup
-      - run: make check_changelog
+      - run: make dependencies
+      - run: poetry run git tidy-log origin/master..
+      - run: make tidy-lint
 
   deploy:
     executor: python
@@ -50,7 +54,7 @@ jobs:
       - run: echo "${GITHUB_DEVOPS_PRIVATE_SSH_KEY_BASE64}" | base64 --decode | ssh-add - > /dev/null
       - restore_cache:
           key: v1-{{ checksum "poetry.lock" }}
-      - run: make ci_setup
+      - run: make dependencies
       - run: poetry run python devops.py deploy
 
 workflows:
@@ -59,7 +63,7 @@ workflows:
     jobs:
       - test
       - lint
-      - check_changelog:
+      - check_commits:
           filters:
             branches:
               ignore: master
