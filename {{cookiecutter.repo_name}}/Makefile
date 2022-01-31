@@ -33,7 +33,10 @@ MAKE_CMD_WRAPPER?=docker run --rm -v $(shell pwd):/code -v ~/.ssh:/home/circleci
 help:
 	@echo "Please choose one of the following targets: \n"\
 	      "    setup: Setup development environment\n"\
+	      "    lock: Lock dependencies\n"\
 	      "    dependencies: Install dependencies\n"\
+	      "    shell: Start a shell\n"\
+	      "    run: Run a command\n"\
 	      "    test: Run tests\n"\
 	      "    tox: Run tests against all versions of Python\n"\
 	      "    lint: Run code linting and static checks\n"\
@@ -42,6 +45,12 @@ help:
 	      "\n"\
 	      "View the Makefile for more documentation"
 	@exit 2
+
+
+# Locks all dependencies for a project
+.PHONY: lock
+lock:
+	$(MAKE_CMD_WRAPPER) poetry lock
 
 
 # Builds all dependencies for a project
@@ -55,6 +64,18 @@ dependencies:
 setup: dependencies
 	$(MAKE_CMD_WRAPPER) poetry run git-tidy --template -o .gitcommit.tpl
 	$(MAKE_CMD_WRAPPER) poetry run git config --local commit.template .gitcommit.tpl
+
+
+# Run a shell
+.PHONY: shell
+shell:
+	$(MAKE_CMD_WRAPPER) /bin/bash -c "SHELL=/bin/bash poetry shell"
+
+
+# Run a command
+.PHONY: run
+run:
+	$(MAKE_CMD_WRAPPER) poetry run $(filter-out $@,$(MAKECMDGOALS))
 
 
 # Run pytest
