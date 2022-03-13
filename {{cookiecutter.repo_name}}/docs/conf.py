@@ -117,7 +117,7 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+# html_static_path = ['_static']
 
 
 # -- Options for HTMLHelp output ------------------------------------------
@@ -149,7 +149,7 @@ latex_elements = {
 latex_documents = [
     (
         master_doc,
-        'cookiecutterrepo_name.tex',
+        '{{cookiecutter.repo_name}}.tex',
         u'{{cookiecutter.repo_name}} Documentation',
         u'Opus 10',
         'manual',
@@ -164,7 +164,7 @@ latex_documents = [
 man_pages = [
     (
         master_doc,
-        'cookiecutterrepo_name',
+        '{{cookiecutter.repo_name}}',
         u'{{cookiecutter.repo_name}} Documentation',
         [author],
         1,
@@ -180,18 +180,14 @@ man_pages = [
 texinfo_documents = [
     (
         master_doc,
-        'cookiecutterrepo_name',
+        '{{cookiecutter.repo_name}}',
         u'{{cookiecutter.repo_name}} Documentation',
         author,
-        'cookiecutterrepo_name',
-        'One line description of project.',
+        '{{cookiecutter.repo_name}}',
+        '{{cookiecutter.short_description}}',
         'Miscellaneous',
     )
 ]
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}
-
-
-def setup(app):
-    app.add_css_file('css/custom.css')
