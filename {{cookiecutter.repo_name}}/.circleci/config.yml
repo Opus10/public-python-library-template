@@ -2,7 +2,7 @@ version: 2.1
 
 executors:
   python:
-    working_directory: ~/{{cookiecutter.repo_name}}
+    working_directory: /code
     docker:
       - image: opus10/circleci-public-python-library
         environment:
@@ -22,10 +22,9 @@ jobs:
       - save_cache:
           key: v1-{{ checksum "poetry.lock" }}
           paths:
-            - /home/circleci/.local
-            - /home/circleci/.cache/pypoetry/virtualenvs
-            - /home/circleci/{% endraw -%}{{cookiecutter.repo_name}}{% raw -%}/.venv
-            - /home/circleci/{% endraw -%}{{cookiecutter.repo_name}}{% raw -%}/.tox
+            - /home/circleci/.cache/pypoetry/
+            - /code/.venv
+            - /code/.tox
 
   lint:
     executor: python
