@@ -48,6 +48,10 @@ RUN sudo curl -O https://www.python.org/ftp/python/3.9.10/Python-3.9.10.tgz && \
     cd .. && \
     sudo rm -r Python-3.9.10
 
+RUN sudo apt-get install postgresql-client
+
 RUN sudo mkdir /code
+RUN sudo chmod 0777 /code
 WORKDIR /code
-RUN poetry config virtualenvs.in-project true
+ENV PATH=/code/.venv/bin:${PATH} \
+    POETRY_VIRTUALENVS_IN_PROJECT=true

@@ -69,7 +69,7 @@ scaffolding provided by the template, which includes:
 1. Automatic deployment to PyPI when merging into the master
    (see ``.circleci/config.yaml``).
 2. Flake8 integration (see ``setup.cfg`` for configuration).
-3. Coverage integration (see ``setup.cfg`` for coverage configuration).
+3. Coverage integration (see ``pyproject.toml`` for coverage configuration).
 4. Automatic version tagging and version bumping (more on this in later
    sections).
 5. Automatic generation of CHANGELOG.md using
