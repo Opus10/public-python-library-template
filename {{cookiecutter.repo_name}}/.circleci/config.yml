@@ -6,8 +6,8 @@ executors:
     docker:
       - image: opus10/circleci-public-python-library
         environment:
-          # Ensure makefile commands are not wrapped in "docker run"
-          MAKE_CMD_WRAPPER: ''
+          # Ensure makefile commands are not wrapped in "docker exec"
+          DOCKER_EXEC_WRAPPER: ''
 
 {% raw -%}
 jobs:
